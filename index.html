@@ -1,0 +1,84 @@
+<html lang='en'>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+* {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+}
+
+#container {
+    height: inherit;
+    width: inherit;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: calc(100vh/5);
+}
+
+#container > div {
+    background-color: tomato;
+    display: flex;
+    color: tomato;
+    justify-content: center;
+    align-items: center;
+    font-size: large;
+}
+
+#container > div.active {
+    background-color: white;
+    color: tomato
+}
+
+
+
+</style>    
+</head>
+<body>
+    <div id='container'></div>
+
+</body>    
+
+<script>
+const container = document.getElementById('container')
+
+for (i = 0; i < 20 ; i++ ){
+    const box = document.createElement('div')
+    box.className = "box"
+    container.appendChild(box)
+}
+
+const active = document.getElementsByClassName('box');
+let speech = new SpeechSynthesisUtterance();
+
+advance = () => {
+    for (let i = 0; i < active.length; i++){
+        let beepBoop = (Math.random() > .5) ? 'beep' : 'boop'
+        speech.text = beepBoop
+
+        let next
+
+        switch (i){
+            case active.length-1:
+                next = 0;
+                break;
+            // case 
+            default:
+                next = i+1
+        }
+
+        if (active[i].classList.contains('active')){
+            active[i].classList.remove('active')
+            active[next].classList.add('active')
+            window.speechSynthesis.speak(speech);
+            active[next].innerHTML = beepBoop
+        break
+        }
+    }
+}
+
+active[0].classList.add('active')
+active[0].innerHTML = 'boop me'
+active[0].onclick = function(){setInterval(advance, 600)}
+</script>
+</html>
